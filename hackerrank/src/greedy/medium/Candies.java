@@ -5,34 +5,36 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Candies {
-
-    // Complete the candies function below.
+	
+	
+	// 풀이 방법
+	// 1. 정방향으로 값이 커질 때 값이 커진 것을 기록.
+	// 2. 역방향으로 값이 연속으로 작아질 때 값 보정
+	// 효율성 = O(2N)
+	
+	// 개선 여지
+	// descCnt를 기록하면 N번으로 가능하지 않을까 싶다.
+	// 효율성 = O(N)
     static long candies(int n, int[] arr) {
-
-    	int[] candies = new int[n];
+    	
+    	long[] candies = new long[n];
     	candies[0] = 1;
     	
     	for (int i = 1; i < n; i++) {
-    		
     		if (arr[i-1] < arr[i]) {
-    			candies[i] = candies[i-1]++;
-    			
+    			candies[i] = candies[i-1] + 1;
     		} else {
     			candies[i] = 1;
-    			
-    			for (int j=i; j>=1; j--) {
-    				
-    				if (candies[j-1] == candies[j]) {
-    					candies[j-1]++;
-    					
-    				} else {
-    					break;
-    				}
-    			}
     		}
     	}
     	
-    	System.out.println(Arrays.toString(candies));
+    	for (int i = n - 1; i >= 1; i--) {
+			if (candies[i-1] <= candies[i]
+				&& arr[i-1] > arr[i]) {
+				
+				candies[i-1] = candies[i] + 1;
+			}
+    	}
     	
     	return Arrays.stream(candies).sum();
     }
